@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import *
 import customtkinter as ctk
+from pathlib import Path
 
 
 
@@ -152,7 +153,8 @@ janela.title("Algoritmo Genetico Equipe 2")
 janela.configure()
 janela.geometry("900x600")
 janela.resizable(False, False)
-janela.iconbitmap(default='C:/Users/kawan/OneDrive/Documentos/Prog/Python/OCalgoritmoGenetico/imagens/dna_branco2.ico')
+caminho_imagem = Path(__file__).parent / 'imagens' / 'dna_branco2.ico'
+janela.iconbitmap(default=str(caminho_imagem))
 
 
 
