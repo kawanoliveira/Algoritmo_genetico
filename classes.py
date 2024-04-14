@@ -3,7 +3,7 @@ import random
 
 class INDIVIDUOS:
 
-    def __init__(self, x="random", y="random"):
+    def __init__(self, x="randomico", y="randomico"):
         self.x = None
         self.y = None
         self.fitness = None

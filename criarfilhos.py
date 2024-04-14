@@ -32,10 +32,10 @@ def atualizar_individuos(num, velhos_individuos):
         i = i+1
 
     for individuo in novos_individuos:
-        if individuo.get_x() == "random":
+        if individuo.get_x() == "randomico":
             individuo.set_x(random.uniform(-10, 10))
 
-        if individuo.get_y() == "random":
+        if individuo.get_y() == "randomico":
             individuo.set_y(random.uniform(-10, 10))
 
     return novos_individuos
@@ -44,7 +44,7 @@ def tirar_randoms(individuos: list[classes.INDIVIDUOS]):
     individuos_a_remover = []
     i = 0
     for i in range(len(individuos)):
-        if individuos[i].get_x() == "random" and individuos[i].get_y() == "random":
+        if individuos[i].get_x() == "randomico" and individuos[i].get_y() == "randomico":
             individuos_a_remover.append(individuos[i])
 
     for individuo in individuos_a_remover:

@@ -23,6 +23,7 @@ def gerar_indv():
   bttn_gerar_indv.place_forget()
 
   global optm_seletor_indv
+  global var_seletor
   var_seletor = ctk.StringVar()
   var_seletor.set(vetor_individuos_str[0])
   optm_seletor_indv = ctk.CTkOptionMenu(janela,
@@ -38,6 +39,7 @@ def gerar_indv():
                         width=180,
                         height=200,
                         font=("Inter", 19, "bold"),)
+  var_seletor.trace_add("write", troca_indv)
 
 
 
@@ -182,7 +184,17 @@ def botao_inicio_teste():
   else:
     txt_erro_semcriterio.place_forget()
 
-var = True
+def troca_indv(varname, index, mode):
+  individuo = var_seletor.get()
+  individuo = int(individuo[10:len(individuo)])
+  individuo = individuo - 1
+  
+  var_ent_x = ctk.StringVar
+  var = str(vetor_individuos[individuo].get_x())
+  var_ent_x.set(var)
+  ent_x_indv = ctk.CTkEntry(master=janela,
+                            textvariable=var_ent_x)
+  ent_x_indv.place(relx=0.5, rely=0.05, anchor=CENTER)
 
 janela = ctk.CTk()
 
