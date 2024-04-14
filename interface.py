@@ -2,13 +2,49 @@ import tkinter as tk
 from tkinter import *
 import customtkinter as ctk
 from pathlib import Path
+import criarfilhos as cf
+from CTkScrollableDropdown import *
+
+
+
+def gerar_indv():
+  ent_num_indv.configure(state="disabled", fg_color="#0c1a20", border_color="#204d53", text_color="grey")
+  txt_num_indv.configure(text_color="grey")
+  indv_nao_gerados.set("false")
+  botao_inicio_teste()
+  txt_indv_nao_gerados.place_forget()
+  inteiro = int(var_ent_num_indv.get())
+
+  global vetor_individuos 
+  vetor_individuos = cf.criar_individuos(inteiro)
+  global vetor_individuos_str
+  vetor_individuos_str = cf.criar_vet_strings(inteiro)
+  
+  bttn_gerar_indv.place_forget()
+
+  global optm_seletor_indv
+  var_seletor = ctk.StringVar()
+  var_seletor.set(vetor_individuos_str[0])
+  optm_seletor_indv = ctk.CTkOptionMenu(janela,
+                                        width=180,
+                                        height=50,
+                                        font=("Inter", 19, "bold"),
+                                        variable=var_seletor,
+                                        fg_color="#142C36",)
+  optm_seletor_indv.place(relx=0.2, rely=0.55, anchor=CENTER)
+
+  CTkScrollableDropdown(optm_seletor_indv,
+                        values=vetor_individuos_str,
+                        width=180,
+                        height=200,
+                        font=("Inter", 19, "bold"),)
 
 
 
 def acao():
     print(not(var_max_gen.get()))
     print(var_convergencia.get())
-    print(var_valor_goal.get())
+    print(vetor_individuos)
 
 def stringnumerica(text):
   if text != "" and text != "0":
@@ -108,14 +144,17 @@ def erro_num_indiv(varname, index, mode):
   if stringnumerica(var_ent_num_indv.get()) == 1:
     txt_erro_num_indv.place_forget()
     txt_erro_num_indv_zero.place_forget()
+    bttn_gerar_indv.configure(state="normal")
     botao_inicio_teste()
   if stringnumerica(var_ent_num_indv.get()) == 2:
     txt_erro_num_indv.place(relx=0.645, rely=0.11, anchor=CENTER)
     txt_erro_num_indv_zero.place_forget()
+    bttn_gerar_indv.configure(state="disabled")
     botao_inicio_teste()
   if stringnumerica(var_ent_num_indv.get()) == 3:
     txt_erro_num_indv_zero.place(relx=0.645, rely=0.11, anchor=CENTER)
     txt_erro_num_indv.place_forget()
+    bttn_gerar_indv.configure(state="disabled")
     botao_inicio_teste()
 
 
@@ -133,7 +172,7 @@ def botao_inicio_teste():
   if (stringnumerica(var_ent_maxgen.get()) == 3 and var_max_gen.get() == True) or (stringnumerica(var_ent_goal.get()) == 3 and var_valor_goal.get() == True) or (stringnumerica(var_ent_conver.get()) == 3 and var_convergencia.get() == True) or stringnumerica(var_ent_num_indv.get()) == 3:
     var_zero = True
 
-  if (string_n_numerica or sem_criterio_parada or var_zero):
+  if (string_n_numerica or sem_criterio_parada or var_zero or indv_nao_gerados.get() == "true"):
     bttn_inicio.configure(state="disabled")
   else:
     bttn_inicio.configure(state="normal")
@@ -143,7 +182,7 @@ def botao_inicio_teste():
   else:
     txt_erro_semcriterio.place_forget()
 
-
+var = True
 
 janela = ctk.CTk()
 
@@ -161,7 +200,7 @@ janela.iconbitmap(default=str(caminho_imagem))
 #texto alg genetico
 txt_titulo = ctk.CTkLabel(master=janela,    
                       text="Algoritmo Genetico",
-                      font=("minecraft enchantment", 24, "bold"),
+                      font=("Inter", 24, "bold"),
                       text_color="white")
 txt_titulo.place(relx=0.5, rely=0.05, anchor=CENTER)
 
@@ -186,7 +225,8 @@ bttn_inicio = ctk.CTkButton(master=janela,
                               corner_radius=15,
                               fg_color="#056B1B",
                               hover_color="#054E15",
-                              command=acao)
+                              command=acao,
+                              state="disabled")
 bttn_inicio.place(relx=0.85, rely=0.23, anchor=CENTER)
 
 
@@ -401,11 +441,12 @@ ent_num_indv = ctk.CTkEntry(master=janela,
                           border_color="#29636B",
                           font=("Inter", 17, "bold"),
                           placeholder_text_color="#646464",
+                          text_color="white",
                           width=80,
                           height=40,
                           textvariable=var_ent_num_indv)
 var_ent_num_indv.trace_add("write", erro_num_indiv)
-ent_num_indv.place(relx=0.645, rely=0.17, anchor=CENTER)
+ent_num_indv.place(relx=0.645, rely=0.26, anchor=CENTER)
 
 
 
@@ -424,7 +465,7 @@ txt_num_indv = ctk.CTkLabel(master=janela,
                              font=("Inter", 19, "bold"), 
                              text_color="white",
                              wraplength=150)
-txt_num_indv.place(relx=0.645, rely=0.26, anchor=CENTER)
+txt_num_indv.place(relx=0.645, rely=0.17, anchor=CENTER)
 
 
 
@@ -463,6 +504,32 @@ txt_erro_num_indv_zero = ctk.CTkLabel(master=janela,
                              wraplength=150)
 
 
+
+#botão gerar individuos
+indv_nao_gerados = ctk.StringVar()
+indv_nao_gerados.set("true")
+bttn_gerar_indv = ctk.CTkButton(master=janela,
+                              text="Gerar Individuos",
+                              font=("Inter", 26, "bold"),
+                              text_color="black",
+                              width=128,
+                              height=71,
+                              corner_radius=15,
+                              fg_color="#e6c619",
+                              hover_color="#b29a13",
+                              command=gerar_indv)
+bttn_gerar_indv.place(relx=0.25, rely=0.73, anchor=CENTER)
+
+
+
+#texto individuos não gerados
+txt_indv_nao_gerados = ctk.CTkLabel(master=janela, 
+                             text="Gere os individuos primeiro",
+                             font=("Inter", 12, "bold"), 
+                             text_color="#e6c619",
+                             wraplength=150,
+                             width= 200)
+txt_indv_nao_gerados.place(relx=0.85, rely=0.13, anchor=CENTER)
 
 
 

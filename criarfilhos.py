@@ -19,7 +19,7 @@ def criar_individuos(num):
 
     return novos_individuos
 
-def atualizar_lista(num, velhos_individuos):
+def atualizar_individuos(num, velhos_individuos):
     novos_individuos = []
     velhos_individuos = tirar_randoms(velhos_individuos)
     i = 0
@@ -51,3 +51,9 @@ def tirar_randoms(individuos: list[classes.INDIVIDUOS]):
         individuos.remove(individuo)
 
     return individuos
+
+def criar_vet_strings(num):
+    vetor_strings = []
+    for i in range(num):
+        vetor_strings.append("Individuo {}".format(i + 1))
+    return vetor_strings
