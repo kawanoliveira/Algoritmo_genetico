@@ -206,6 +206,7 @@ janela.geometry("900x600")
 janela.resizable(False, False)
 caminho_imagem = Path(__file__).parent / 'imagens' / 'dna_branco2.ico'
 janela.iconbitmap(default=str(caminho_imagem))
+ctk.set_appearance_mode("dark")
 
 
 
