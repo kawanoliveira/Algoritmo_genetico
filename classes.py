@@ -24,13 +24,13 @@ class INDIVIDUOS:
         return self.x
 
     def set_x(self, novo_x):
-        self.x = float(novo_x)
+        self.x = novo_x
 
     def get_y(self):
         return self.y
 
     def set_y(self, novo_y):
-        self.y = float(novo_y)
+        self.y = novo_y
 
     def get_fitness(self):
         return self.fitness
@@ -39,4 +39,4 @@ class INDIVIDUOS:
         self.fitness = float(novo_fitness)
 
     def __str__(self):  # Define a string representation for better printing
-        return f"Individuo: x={self.x:.3}, y={self.y:.3}, Fitness: {self.fitness}"
+        return f"Individuo: x={self.x}, y={self.y}, Fitness: {self.fitness}"

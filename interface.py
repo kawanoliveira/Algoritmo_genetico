@@ -7,46 +7,9 @@ from CTkScrollableDropdown import *
 
 
 
-def gerar_indv():
-  ent_num_indv.configure(state="disabled", fg_color="#0c1a20", border_color="#204d53", text_color="grey")
-  txt_num_indv.configure(text_color="grey")
-  indv_nao_gerados.set("false")
-  botao_inicio_teste()
-  txt_indv_nao_gerados.place_forget()
-  inteiro = int(var_ent_num_indv.get())
-
-  global vetor_individuos 
-  vetor_individuos = cf.criar_individuos(inteiro)
-  global vetor_individuos_str
-  vetor_individuos_str = cf.criar_vet_strings(inteiro)
-  
-  bttn_gerar_indv.place_forget()
-
-  global optm_seletor_indv
-  global var_seletor
-  var_seletor = ctk.StringVar()
-  var_seletor.set(vetor_individuos_str[0])
-  optm_seletor_indv = ctk.CTkOptionMenu(janela,
-                                        width=180,
-                                        height=50,
-                                        font=("Inter", 19, "bold"),
-                                        variable=var_seletor,
-                                        fg_color="#142C36",)
-  optm_seletor_indv.place(relx=0.2, rely=0.55, anchor=CENTER)
-
-  CTkScrollableDropdown(optm_seletor_indv,
-                        values=vetor_individuos_str,
-                        width=180,
-                        height=200,
-                        font=("Inter", 19, "bold"),)
-  var_seletor.trace_add("write", troca_indv)
-
-
-
 def acao():
-    print(not(var_max_gen.get()))
-    print(var_convergencia.get())
-    print(vetor_individuos)
+  for individuol in vetor_individuos:
+    print(individuol)
 
 def stringnumerica(text):
   if text != "" and text != "0":
@@ -57,6 +20,8 @@ def stringnumerica(text):
     return 1 #se a string for numerica
   else:
     return 3 #string vazia ou zero
+
+
 
 def max_gen_att(varname, index, mode):
   if var_max_gen.get():
@@ -159,12 +124,78 @@ def erro_num_indiv(varname, index, mode):
     bttn_gerar_indv.configure(state="disabled")
     botao_inicio_teste()
 
+def erro_x_indv(varname, index, mode):
+  vetor_individuos[individuo].set_x(var_ent_x.get())
+  if stringnumerica(var_ent_x.get()) == 1 or var_ent_x.get() == "0" or var_ent_x.get() == "randomico":
+    txt_erro_ent_x.place_forget()
+    txt_erro_ent_x_vazia.place_forget()
+    botao_inicio_teste()
+  elif stringnumerica(var_ent_x.get()) == 2:
+    txt_erro_ent_x.place(relx=0.35, rely=0.63, anchor=CENTER)
+    txt_erro_ent_x_vazia.place_forget()
+    botao_inicio_teste()
+  elif stringnumerica(var_ent_x.get()) == 3 and var_ent_x.get() != "0":
+    txt_erro_ent_x_vazia.place(relx=0.35, rely=0.63, anchor=CENTER)
+    txt_erro_ent_x.place_forget()
+    botao_inicio_teste()
 
+def erro_y_indv(varname, index, mode):
+  if stringnumerica(var_ent_y.get()) == 1 or var_ent_y.get() == "0" or var_ent_y.get() == "randomico":
+    txt_erro_ent_y.place_forget()
+    txt_erro_ent_y_vazia.place_forget()
+    botao_inicio_teste()
+  elif stringnumerica(var_ent_y.get()) == 2:
+    txt_erro_ent_y.place(relx=0.35, rely=0.78, anchor=CENTER)
+    txt_erro_ent_y_vazia.place_forget()
+    botao_inicio_teste()
+  elif stringnumerica(var_ent_y.get()) == 3 and var_ent_y != "0":
+    txt_erro_ent_y_vazia.place(relx=0.35, rely=0.78, anchor=CENTER)
+    txt_erro_ent_y.place_forget()
+    botao_inicio_teste()
+
+
+
+def gerar_indv():
+  ent_num_indv.configure(state="disabled", fg_color="#0c1a20", border_color="#204d53", text_color="grey")
+  txt_num_indv.configure(text_color="grey")
+  indv_nao_gerados.set("false")
+  txt_indv_nao_gerados.place_forget()
+  inteiro = int(var_ent_num_indv.get())
+
+  global vetor_individuos 
+  vetor_individuos = cf.criar_individuos(inteiro)
+  global vetor_individuos_str
+  vetor_individuos_str = cf.criar_vet_strings(inteiro)
+  
+  bttn_gerar_indv.place_forget()
+  
+
+  global optm_seletor_indv
+  global var_seletor
+  var_seletor = ctk.StringVar()
+  var_seletor.set(vetor_individuos_str[0])
+  optm_seletor_indv = ctk.CTkOptionMenu(janela,
+                                        width=180,
+                                        height=50,
+                                        font=("Inter", 19, "bold"),
+                                        variable=var_seletor,
+                                        fg_color="#142C36",)
+  optm_seletor_indv.place(relx=0.2, rely=0.55, anchor=CENTER)
+
+  CTkScrollableDropdown(optm_seletor_indv,
+                        values=vetor_individuos_str,
+                        width=180,
+                        height=200,
+                        font=("Inter", 19, "bold"),)
+  var_seletor.trace_add("write", troca_indv)
+  troca_indv(0,0,0)
+  botao_inicio_teste()
 
 def botao_inicio_teste():
   string_n_numerica = False
   sem_criterio_parada = False
   var_zero = False
+  erro_indv = False
   if stringnumerica(var_ent_maxgen.get()) == 2 or stringnumerica(var_ent_goal.get()) == 2 or stringnumerica(var_ent_conver.get()) == 2 or stringnumerica(var_ent_num_indv.get()) == 2:
     string_n_numerica = True
 
@@ -174,7 +205,16 @@ def botao_inicio_teste():
   if (stringnumerica(var_ent_maxgen.get()) == 3 and var_max_gen.get() == True) or (stringnumerica(var_ent_goal.get()) == 3 and var_valor_goal.get() == True) or (stringnumerica(var_ent_conver.get()) == 3 and var_convergencia.get() == True) or stringnumerica(var_ent_num_indv.get()) == 3:
     var_zero = True
 
-  if (string_n_numerica or sem_criterio_parada or var_zero or indv_nao_gerados.get() == "true"):
+  if   stringnumerica(vetor_individuos[individuo].get_x()) == 2 and vetor_individuos[individuo].get_x() != "randomico":
+    erro_indv = True
+  elif stringnumerica(vetor_individuos[individuo].get_x()) == 3 and vetor_individuos[individuo].get_x() != "0":
+    erro_indv = True
+  elif stringnumerica(vetor_individuos[individuo].get_y()) == 2 and vetor_individuos[individuo].get_y() != "randomico":
+    erro_indv = True
+  elif stringnumerica(vetor_individuos[individuo].get_y()) == 3 and vetor_individuos[individuo].get_y() != "0":
+    erro_indv = True
+
+  if (string_n_numerica or sem_criterio_parada or var_zero or indv_nao_gerados.get() == "true" or erro_indv):
     bttn_inicio.configure(state="disabled")
   else:
     bttn_inicio.configure(state="normal")
@@ -184,17 +224,67 @@ def botao_inicio_teste():
   else:
     txt_erro_semcriterio.place_forget()
 
+  if erro_indv:
+    optm_seletor_indv.configure(state="disabled")
+  else:
+    optm_seletor_indv.configure(state="normal")
+
 def troca_indv(varname, index, mode):
+  global individuo
   individuo = var_seletor.get()
   individuo = int(individuo[10:len(individuo)])
   individuo = individuo - 1
   
-  var_ent_x = ctk.StringVar
-  var = str(vetor_individuos[individuo].get_x())
-  var_ent_x.set(var)
+
+  vetor_individuos[0].set_x(3)
+  global var_ent_x
+  var_ent_x = ctk.StringVar()
+  var_ent_x.set(vetor_individuos[individuo].get_x())
   ent_x_indv = ctk.CTkEntry(master=janela,
-                            textvariable=var_ent_x)
-  ent_x_indv.place(relx=0.5, rely=0.05, anchor=CENTER)
+                          placeholder_text="1, 2, 3...",
+                          fg_color="#142C36",
+                          border_color="#29636B",
+                          font=("Inter", 22, "bold"),
+                          placeholder_text_color="#646464",
+                          text_color="white",
+                          width=300,
+                          height=50,
+                          textvariable=var_ent_x)
+  ent_x_indv.place(relx=0.35, rely=0.7, anchor=CENTER)
+  txt_x_indv = ctk.CTkLabel(master=janela,
+                            text="X:",
+                            text_color="white",
+                            font=("Inter", 22, "bold"))
+  txt_x_indv.place(relx=0.16, rely=0.7, anchor=CENTER)
+  var_ent_x.trace_add("write", erro_x_indv)
+
+  vetor_individuos[0].set_y(6)
+  global var_ent_y
+  var_ent_y = ctk.StringVar()
+  var_ent_y.set(vetor_individuos[individuo].get_y())
+  ent_y_indv = ctk.CTkEntry(master=janela,
+                          placeholder_text="1, 2, 3...",
+                          fg_color="#142C36",
+                          border_color="#29636B",
+                          font=("Inter", 22, "bold"),
+                          placeholder_text_color="#646464",
+                          text_color="white",
+                          width=300,
+                          height=50,
+                          textvariable=var_ent_y)
+  ent_y_indv.place(relx=0.35, rely=0.85, anchor=CENTER)
+  txt_y_indv = ctk.CTkLabel(master=janela,
+                            text="Y:",
+                            text_color="white",
+                            font=("Inter", 22, "bold"))
+  txt_y_indv.place(relx=0.16, rely=0.85, anchor=CENTER)
+  var_ent_y.trace_add("write", erro_y_indv)
+
+
+
+
+
+
 
 janela = ctk.CTk()
 
@@ -207,6 +297,12 @@ janela.resizable(False, False)
 caminho_imagem = Path(__file__).parent / 'imagens' / 'dna_branco2.ico'
 janela.iconbitmap(default=str(caminho_imagem))
 ctk.set_appearance_mode("dark")
+
+
+
+
+
+
 
 
 
@@ -545,6 +641,30 @@ txt_indv_nao_gerados = ctk.CTkLabel(master=janela,
 txt_indv_nao_gerados.place(relx=0.85, rely=0.13, anchor=CENTER)
 
 
+
+txt_erro_ent_x = ctk.CTkLabel(master=janela, 
+                             text="Informe apenas numeros ou 'randomico'!",
+                             font=("Inter", 12, "bold"), 
+                             text_color="red",
+                             wraplength=300)
+
+txt_erro_ent_y = ctk.CTkLabel(master=janela, 
+                             text="Informe apenas numeros ou 'randomico'!",
+                             font=("Inter", 12, "bold"), 
+                             text_color="red",
+                             wraplength=300)
+
+txt_erro_ent_x_vazia = ctk.CTkLabel(master=janela, 
+                             text="O valor não pode estar vazio!",
+                             font=("Inter", 12, "bold"), 
+                             text_color="red",
+                             wraplength=300)
+
+txt_erro_ent_y_vazia = ctk.CTkLabel(master=janela, 
+                             text="O valor não pode estar vazio!",
+                             font=("Inter", 12, "bold"), 
+                             text_color="red",
+                             wraplength=300)
 
 
 
