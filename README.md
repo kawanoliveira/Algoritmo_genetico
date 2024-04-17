@@ -1,6 +1,6 @@
 Algoritmo genetico.
 
 Feito por:
-Weberson JR Morelli
+Weberson Morelli Leite Junior
 Gabriel Cezimbra
 Kawan De Oliveira
