@@ -7,9 +7,9 @@ from CTkScrollableDropdown import *
 
 
 
-def acao():
-  for individuol in vetor_individuos:
-    print(individuol)
+def acao(vetor_individuos1):
+  vetor_individuos1 = cf.atualizar_individuos(len(vetor_individuos1), vetor_individuos1)
+  print("dsad")
 
 def stringnumerica(text):
   if text != "" and text != "0":
@@ -21,12 +21,23 @@ def stringnumerica(text):
   else:
     return 3 #string vazia ou zero
 
+def stringnumerica2(text):
+  if text != "" and text != "0":
+    try:
+      float(text)
+    except ValueError:
+      return 2
+    if float(text) > 10 or float(text) < -10:
+      return 3
+    return 1 #se a string for numerica
+  else:
+    return 3 #string vazia ou zero
 
 
 def max_gen_att(varname, index, mode):
   if var_max_gen.get():
-    txt_informe.place(relx=0.15, rely=0.37, anchor=CENTER)
-    ent_maxgen.place(relx=0.3, rely=0.375, anchor=CENTER)
+    txt_informe.place(relx=0.15, rely=0.32, anchor=CENTER)
+    ent_maxgen.place(relx=0.3, rely=0.32, anchor=CENTER)
     erro_maxgen(0,0,0)
   else:
     txt_informe.place_forget()
@@ -38,8 +49,8 @@ def max_gen_att(varname, index, mode):
 
 def goal_att(varname, index, mode):
   if var_valor_goal.get():
-    txt_informegoal.place(relx=0.42, rely=0.37, anchor=CENTER)
-    ent_goal.place(relx=0.515, rely=0.375, anchor=CENTER)
+    txt_informegoal.place(relx=0.42, rely=0.32, anchor=CENTER)
+    ent_goal.place(relx=0.515, rely=0.32, anchor=CENTER)
     erro_goal(0,0,0)
   else:
     txt_informegoal.place_forget()
@@ -51,8 +62,8 @@ def goal_att(varname, index, mode):
 
 def conver_att(varname, index, mode):
   if var_convergencia.get():
-    txt_informeconver.place(relx=0.65, rely=0.37, anchor=CENTER)
-    ent_conver.place(relx=0.773, rely=0.375, anchor=CENTER)
+    txt_informeconver.place(relx=0.65, rely=0.32, anchor=CENTER)
+    ent_conver.place(relx=0.773, rely=0.32, anchor=CENTER)
     var_ent_conver.set("25")
     erro_conver(0,0,0)
   else:
@@ -71,12 +82,12 @@ def erro_maxgen(varname, index, mode):
     txt_erro_maxgen_zero.place_forget()
     botao_inicio_teste()
   if stringnumerica(var_ent_maxgen.get()) == 2:
-    txt_erro_maxgen.place(relx=0.2, rely=0.432, anchor=CENTER)
+    txt_erro_maxgen.place(relx=0.2, rely=0.375, anchor=CENTER)
     txt_erro_maxgen_zero.place_forget()
     botao_inicio_teste()
   if stringnumerica(var_ent_maxgen.get()) == 3:
     txt_erro_maxgen.place_forget()
-    txt_erro_maxgen_zero.place(relx=0.2, rely=0.432, anchor=CENTER)
+    txt_erro_maxgen_zero.place(relx=0.2, rely=0.375, anchor=CENTER)
     botao_inicio_teste()
 
 def erro_goal(varname, index, mode):
@@ -85,11 +96,11 @@ def erro_goal(varname, index, mode):
     txt_erro_goal_zero.place_forget()
     botao_inicio_teste()
   if stringnumerica(var_ent_goal.get()) == 2:
-    txt_erro_goal.place(relx=0.47, rely=0.432, anchor=CENTER)
+    txt_erro_goal.place(relx=0.47, rely=0.375, anchor=CENTER)
     txt_erro_goal_zero.place_forget()
     botao_inicio_teste()
   if stringnumerica(var_ent_goal.get()) == 3:
-    txt_erro_goal_zero.place(relx=0.47, rely=0.432, anchor=CENTER)
+    txt_erro_goal_zero.place(relx=0.47, rely=0.375, anchor=CENTER)
     txt_erro_goal.place_forget()
     botao_inicio_teste()
 
@@ -99,11 +110,11 @@ def erro_conver(varname, index, mode):
     txt_erro_conver_zero.place_forget()
     botao_inicio_teste()
   if stringnumerica(var_ent_conver.get()) == 2:
-    txt_erro_conver.place(relx=0.7, rely=0.432, anchor=CENTER)
+    txt_erro_conver.place(relx=0.7, rely=0.375, anchor=CENTER)
     txt_erro_conver_zero.place_forget()
     botao_inicio_teste()
   if stringnumerica(var_ent_conver.get()) == 3:
-    txt_erro_conver_zero.place(relx=0.7, rely=0.432, anchor=CENTER)
+    txt_erro_conver_zero.place(relx=0.7, rely=0.375, anchor=CENTER)
     txt_erro_conver.place_forget()
     botao_inicio_teste()
 
@@ -114,43 +125,43 @@ def erro_num_indiv(varname, index, mode):
     bttn_gerar_indv.configure(state="normal")
     botao_inicio_teste()
   if stringnumerica(var_ent_num_indv.get()) == 2:
-    txt_erro_num_indv.place(relx=0.645, rely=0.11, anchor=CENTER)
+    txt_erro_num_indv.place(relx=0.645, rely=0.26, anchor=CENTER)
     txt_erro_num_indv_zero.place_forget()
     bttn_gerar_indv.configure(state="disabled")
     botao_inicio_teste()
   if stringnumerica(var_ent_num_indv.get()) == 3:
-    txt_erro_num_indv_zero.place(relx=0.645, rely=0.11, anchor=CENTER)
+    txt_erro_num_indv_zero.place(relx=0.645, rely=0.26, anchor=CENTER)
     txt_erro_num_indv.place_forget()
     bttn_gerar_indv.configure(state="disabled")
     botao_inicio_teste()
 
 def erro_x_indv(varname, index, mode):
   vetor_individuos[individuo].set_x(var_ent_x.get())
-  if stringnumerica(var_ent_x.get()) == 1 or var_ent_x.get() == "0" or var_ent_x.get() == "randomico":
+  if stringnumerica2(var_ent_x.get()) == 1 or var_ent_x.get() == "0" or var_ent_x.get() == "randomico":
     txt_erro_ent_x.place_forget()
     txt_erro_ent_x_vazia.place_forget()
     botao_inicio_teste()
-  elif stringnumerica(var_ent_x.get()) == 2:
-    txt_erro_ent_x.place(relx=0.35, rely=0.63, anchor=CENTER)
+  elif stringnumerica2(var_ent_x.get()) == 2:
+    txt_erro_ent_x.place(relx=0.35, rely=0.73, anchor=CENTER)
     txt_erro_ent_x_vazia.place_forget()
     botao_inicio_teste()
-  elif stringnumerica(var_ent_x.get()) == 3 and var_ent_x.get() != "0":
-    txt_erro_ent_x_vazia.place(relx=0.35, rely=0.63, anchor=CENTER)
+  elif stringnumerica2(var_ent_x.get()) == 3 and var_ent_x.get() != "0":
+    txt_erro_ent_x_vazia.place(relx=0.35, rely=0.73, anchor=CENTER)
     txt_erro_ent_x.place_forget()
     botao_inicio_teste()
 
 def erro_y_indv(varname, index, mode):
   vetor_individuos[individuo].set_y(var_ent_y.get())
-  if stringnumerica(var_ent_y.get()) == 1 or var_ent_y.get() == "0" or var_ent_y.get() == "randomico":
+  if stringnumerica2(var_ent_y.get()) == 1 or var_ent_y.get() == "0" or var_ent_y.get() == "randomico":
     txt_erro_ent_y.place_forget()
     txt_erro_ent_y_vazia.place_forget()
     botao_inicio_teste()
-  elif stringnumerica(var_ent_y.get()) == 2:
-    txt_erro_ent_y.place(relx=0.35, rely=0.78, anchor=CENTER)
+  elif stringnumerica2(var_ent_y.get()) == 2:
+    txt_erro_ent_y.place(relx=0.35, rely=0.98, anchor=CENTER)
     txt_erro_ent_y_vazia.place_forget()
     botao_inicio_teste()
-  elif stringnumerica(var_ent_y.get()) == 3 and var_ent_y != "0":
-    txt_erro_ent_y_vazia.place(relx=0.35, rely=0.78, anchor=CENTER)
+  elif stringnumerica2(var_ent_y.get()) == 3 and var_ent_y != "0":
+    txt_erro_ent_y_vazia.place(relx=0.35, rely=0.98, anchor=CENTER)
     txt_erro_ent_y.place_forget()
     botao_inicio_teste()
 
@@ -181,7 +192,8 @@ def gerar_indv():
                                         font=("Inter", 19, "bold"),
                                         variable=var_seletor,
                                         fg_color="#142C36",)
-  optm_seletor_indv.place(relx=0.2, rely=0.55, anchor=CENTER)
+  optm_seletor_indv.place(relx=0.2, rely=0.67, anchor=CENTER)
+  txt_exemplo_indv.place(relx=0.31, rely=0.85, anchor=CENTER)
 
   CTkScrollableDropdown(optm_seletor_indv,
                         values=vetor_individuos_str,
@@ -206,14 +218,14 @@ def botao_inicio_teste():
   if (stringnumerica(var_ent_maxgen.get()) == 3 and var_max_gen.get() == True) or (stringnumerica(var_ent_goal.get()) == 3 and var_valor_goal.get() == True) or (stringnumerica(var_ent_conver.get()) == 3 and var_convergencia.get() == True) or stringnumerica(var_ent_num_indv.get()) == 3:
     var_zero = True
 
-  if indv_nao_gerados == False:
-    if   stringnumerica(vetor_individuos[individuo].get_x()) == 2 and vetor_individuos[individuo].get_x() != "randomico":
+  if indv_nao_gerados.get() == "false":
+    if   stringnumerica2(vetor_individuos[individuo].get_x()) == 2 and vetor_individuos[individuo].get_x() != "randomico":
       erro_indv = True
-    elif stringnumerica(vetor_individuos[individuo].get_x()) == 3 and vetor_individuos[individuo].get_x() != "0":
+    elif stringnumerica2(vetor_individuos[individuo].get_x()) == 3 and vetor_individuos[individuo].get_x() != "0":
       erro_indv = True
-    elif stringnumerica(vetor_individuos[individuo].get_y()) == 2 and vetor_individuos[individuo].get_y() != "randomico":
+    elif stringnumerica2(vetor_individuos[individuo].get_y()) == 2 and vetor_individuos[individuo].get_y() != "randomico":
       erro_indv = True
-    elif stringnumerica(vetor_individuos[individuo].get_y()) == 3 and vetor_individuos[individuo].get_y() != "0":
+    elif stringnumerica2(vetor_individuos[individuo].get_y()) == 3 and vetor_individuos[individuo].get_y() != "0":
       erro_indv = True
 
   if (string_n_numerica or sem_criterio_parada or var_zero or indv_nao_gerados.get() == "true" or erro_indv):
@@ -222,11 +234,11 @@ def botao_inicio_teste():
     bttn_inicio.configure(state="normal")
 
   if sem_criterio_parada:
-    txt_erro_semcriterio.place(relx=0.85, rely=0.13, anchor=CENTER)
+    txt_erro_semcriterio.place(relx=0.85, rely=0.11, anchor=CENTER)
   else:
     txt_erro_semcriterio.place_forget()
   
-  if indv_nao_gerados == False:
+  if indv_nao_gerados.get() == "false":
     if erro_indv:
       optm_seletor_indv.configure(state="disabled")
     else:
@@ -238,8 +250,6 @@ def troca_indv(varname, index, mode):
   individuo = int(individuo[10:len(individuo)])
   individuo = individuo - 1
   
-
-  vetor_individuos[0].set_x(3)
   global var_ent_x
   var_ent_x = ctk.StringVar()
   var_ent_x.set(vetor_individuos[individuo].get_x())
@@ -253,15 +263,14 @@ def troca_indv(varname, index, mode):
                           width=300,
                           height=50,
                           textvariable=var_ent_x)
-  ent_x_indv.place(relx=0.35, rely=0.7, anchor=CENTER)
+  ent_x_indv.place(relx=0.35, rely=0.78, anchor=CENTER)
   txt_x_indv = ctk.CTkLabel(master=janela,
                             text="X:",
                             text_color="white",
                             font=("Inter", 22, "bold"))
-  txt_x_indv.place(relx=0.16, rely=0.7, anchor=CENTER)
+  txt_x_indv.place(relx=0.16, rely=0.78, anchor=CENTER)
   var_ent_x.trace_add("write", erro_x_indv)
 
-  vetor_individuos[0].set_y(6)
   global var_ent_y
   var_ent_y = ctk.StringVar()
   var_ent_y.set(vetor_individuos[individuo].get_y())
@@ -275,12 +284,12 @@ def troca_indv(varname, index, mode):
                           width=300,
                           height=50,
                           textvariable=var_ent_y)
-  ent_y_indv.place(relx=0.35, rely=0.85, anchor=CENTER)
+  ent_y_indv.place(relx=0.35, rely=0.92, anchor=CENTER)
   txt_y_indv = ctk.CTkLabel(master=janela,
                             text="Y:",
                             text_color="white",
                             font=("Inter", 22, "bold"))
-  txt_y_indv.place(relx=0.16, rely=0.85, anchor=CENTER)
+  txt_y_indv.place(relx=0.16, rely=0.92, anchor=CENTER)
   var_ent_y.trace_add("write", erro_y_indv)
 
 
@@ -295,7 +304,7 @@ janela = ctk.CTk()
 corfundo = "#242424"
 janela.title("Algoritmo Genetico Equipe 2")
 janela.configure()
-janela.geometry("900x600")
+janela.geometry("900x700")
 janela.resizable(False, False)
 caminho_imagem = Path(__file__).parent / 'imagens' / 'dna_branco2.ico'
 janela.iconbitmap(default=str(caminho_imagem))
@@ -315,7 +324,7 @@ txt_titulo = ctk.CTkLabel(master=janela,
                       text="Algoritmo Genetico",
                       font=("Inter", 24, "bold"),
                       text_color="white")
-txt_titulo.place(relx=0.5, rely=0.05, anchor=CENTER)
+txt_titulo.place(relx=0.5, rely=0.03, anchor=CENTER)
 
 
 
@@ -324,7 +333,7 @@ txt_critP = ctk.CTkLabel(master=janela,
                      text="Criterios de parada:",
                      font=("Inter", 19, "bold"), 
                      text_color="white")
-txt_critP.place(relx=0.11, rely=0.09, anchor=CENTER)
+txt_critP.place(relx=0.11, rely=0.07, anchor=CENTER)
 
 
 
@@ -338,9 +347,9 @@ bttn_inicio = ctk.CTkButton(master=janela,
                               corner_radius=15,
                               fg_color="#056B1B",
                               hover_color="#054E15",
-                              command=acao,
+                              command=lambda: acao(vetor_individuos),
                               state="disabled")
-bttn_inicio.place(relx=0.85, rely=0.23, anchor=CENTER)
+bttn_inicio.place(relx=0.85, rely=0.20, anchor=CENTER)
 
 
 
@@ -358,7 +367,7 @@ chkb_check1 = ctk.CTkCheckBox(master=janela,
                               variable=var_max_gen,
                               text="",
                               border_width=2)
-chkb_check1.place(relx=0.085, rely=0.17, anchor=CENTER)
+chkb_check1.place(relx=0.085, rely=0.13, anchor=CENTER)
 var_max_gen.trace_add("write",  max_gen_att)
 
 
@@ -377,7 +386,7 @@ chkb_check2 = ctk.CTkCheckBox(master=janela,
                               variable=var_valor_goal,
                               text="",
                               border_width=2)
-chkb_check2.place(relx=0.265, rely=0.17, anchor=CENTER)
+chkb_check2.place(relx=0.265, rely=0.13, anchor=CENTER)
 var_valor_goal.trace_add("write",  goal_att)
 
 
@@ -396,7 +405,7 @@ chkb_check3 = ctk.CTkCheckBox(master=janela,
                               variable=var_convergencia,
                               text="",
                               border_width=2,)
-chkb_check3.place(relx=0.445, rely=0.17, anchor=CENTER)
+chkb_check3.place(relx=0.445, rely=0.13, anchor=CENTER)
 var_convergencia.trace_add("write", conver_att)
 
 
@@ -407,7 +416,7 @@ txt_maxgen = ctk.CTkLabel(master=janela,
                      font=("Inter", 19, "bold"), 
                      text_color="white",
                      wraplength=150)
-txt_maxgen.place(relx=0.08, rely=0.26, anchor=CENTER)
+txt_maxgen.place(relx=0.08, rely=0.2, anchor=CENTER)
 
 
 
@@ -417,7 +426,7 @@ txt_valorgoal = ctk.CTkLabel(master=janela,
                      font=("Inter", 19, "bold"), 
                      text_color="white",
                      wraplength=100)
-txt_valorgoal.place(relx=0.26, rely=0.26, anchor=CENTER)
+txt_valorgoal.place(relx=0.26, rely=0.2, anchor=CENTER)
 
 
 
@@ -427,7 +436,7 @@ txt_conver = ctk.CTkLabel(master=janela,
                      font=("Inter", 19, "bold"), 
                      text_color="white",
                      wraplength=150)
-txt_conver.place(relx=0.44, rely=0.26, anchor=CENTER)
+txt_conver.place(relx=0.44, rely=0.2, anchor=CENTER)
 
 
 
@@ -487,7 +496,7 @@ txt_informeconver = ctk.CTkLabel(master=janela,
                              font=("Inter", 13, "bold"), 
                              text_color="white",
                              wraplength=150)
-txt_informeconver.place(relx=0.65, rely=0.37, anchor=CENTER)
+txt_informeconver.place(relx=0.65, rely=0.32, anchor=CENTER)
     
 
 
@@ -504,7 +513,7 @@ ent_conver = ctk.CTkEntry(master=janela,
                           height=40,
                           textvariable=var_ent_conver)
 var_ent_conver.trace_add("write", erro_conver)
-ent_conver.place(relx=0.773, rely=0.375, anchor=CENTER)
+ent_conver.place(relx=0.773, rely=0.32, anchor=CENTER)
 
 
 
@@ -559,7 +568,7 @@ ent_num_indv = ctk.CTkEntry(master=janela,
                           height=40,
                           textvariable=var_ent_num_indv)
 var_ent_num_indv.trace_add("write", erro_num_indiv)
-ent_num_indv.place(relx=0.645, rely=0.26, anchor=CENTER)
+ent_num_indv.place(relx=0.645, rely=0.2, anchor=CENTER)
 
 
 
@@ -574,11 +583,11 @@ txt_erro_num_indv = ctk.CTkLabel(master=janela,
 
 #texto que aparece quando marca a check max gen
 txt_num_indv = ctk.CTkLabel(master=janela, 
-                             text="Numero inical de individuos:",
+                             text="N° de individuos por geração:",
                              font=("Inter", 19, "bold"), 
                              text_color="white",
-                             wraplength=150)
-txt_num_indv.place(relx=0.645, rely=0.17, anchor=CENTER)
+                             wraplength=160)
+txt_num_indv.place(relx=0.645, rely=0.13, anchor=CENTER)
 
 
 
@@ -642,7 +651,7 @@ txt_indv_nao_gerados = ctk.CTkLabel(master=janela,
                              text_color="#e6c619",
                              wraplength=150,
                              width= 200)
-txt_indv_nao_gerados.place(relx=0.85, rely=0.13, anchor=CENTER)
+txt_indv_nao_gerados.place(relx=0.85, rely=0.11, anchor=CENTER)
 
 
 
@@ -666,21 +675,43 @@ txt_erro_ent_y = ctk.CTkLabel(master=janela,
 
 #texto erro se a entrada do x for vazia
 txt_erro_ent_x_vazia = ctk.CTkLabel(master=janela, 
-                             text="O valor não pode estar vazio!",
+                             text="O valor não pode estar vazio e deve estar entre -10 e 10!",
                              font=("Inter", 12, "bold"), 
                              text_color="red",
-                             wraplength=300)
+                             wraplength=340)
 
 
 
 #texto erro se a entrada do y for vazia
 txt_erro_ent_y_vazia = ctk.CTkLabel(master=janela, 
-                             text="O valor não pode estar vazio!",
+                             text="O valor não pode estar vazio e deve estar entre -10 e 10!",
                              font=("Inter", 12, "bold"), 
                              text_color="red",
-                             wraplength=300)
+                             wraplength=340)
 
 
+
+#texto exemplo entrada individuos
+txt_exemplo_indv = ctk.CTkLabel(master=janela, 
+                             text="Num: -3.1252 ou 'randomico'",
+                             font=("Inter", 16, "bold"), 
+                             text_color="white",
+                             wraplength=340)
+
+var_ent_porcentagem = ctk.StringVar()
+var_ent_porcentagem.set("1")
+ent_num_indv = ctk.CTkEntry(master=janela,
+                          placeholder_text="1, 2, 3...",
+                          fg_color="#142C36",
+                          border_color="#29636B",
+                          font=("Inter", 17, "bold"),
+                          placeholder_text_color="#646464",
+                          text_color="white",
+                          width=80,
+                          height=40,
+                          textvariable=var_ent_num_indv)
+var_ent_porcentagem.trace_add("write", erro_num_porcentagem)
+ent_num_indv.place(relx=0.645, rely=0.2, anchor=CENTER)
 
 #mandar para o veberson(CLASS individuos vetor_de_individuos,         #vetor de individuos criados 
 #                       criteiro de parada: bool max_gerações,
