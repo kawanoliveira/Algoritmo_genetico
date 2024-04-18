@@ -1,23 +1,21 @@
+def stringnumerica2(text):
+  if text != "" and text != "0":
+    try:
+      float(text)
+    except ValueError:
+      return 2
+    if float(text) > 10 or float(text) < -10:
+      print("AAAAAA", text)
+      return 3
+    return 1 #se a string for numerica
+  else:
+    return 3 #string vazia ou zero
+  
 
-import random
-import criarfilhos as cf
-import classes
-
-populacao_size = 10
-num_generations = 50
-num_parents = 20
-
-# Geração inicial da população
-populacao = []
-for i in range(populacao_size):
-    novoindiv = classes.INDIVIDUOS()
-    novoindiv.set_fitness(i)
-
-    populacao.append(novoindiv)
-
-def selecaoRank(populacao):
-    sortedPopulacao = sorted(populacao, key=lambda x: x.get_fitness(), reverse=True)
-    return sortedPopulacao
-
-x = selecaoRank(populacao)
-print(x)
+stringnumerica2("0")
+stringnumerica2("-20")
+stringnumerica2("10")
+stringnumerica2("12")
+stringnumerica2("-2")
+stringnumerica2("1.32")
+stringnumerica2("1,32")

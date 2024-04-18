@@ -1,5 +1,6 @@
 import classes
 import random
+import struct
 
 def print_individuos(individuos):
     if not individuos:
@@ -33,10 +34,46 @@ def atualizar_individuos(num, velhos_individuos):
 
     for individuo in novos_individuos:
         if individuo.get_x() == "randomico":
-            individuo.set_x(random.uniform(-10, 10))
+            k = 0
+            while k < 10:
+                numero_aleatorio = random.randint(0, 2**32 - 1)
+                binario = format(numero_aleatorio, '032b')
+                binario_string = str(binario)
+                binario_final = "0b"
+                binario_final += binario_string
+                
+                q = int(binario_final, 0)
+                b8 = struct.pack('I', q)
+                x = struct.unpack('f', b8)[0]
+                if x < 10 and x > -10:
+                    k = 11
+            individuo.set_x(binario_final)
+        else:
+            numero_float = float(individuo.get_x())
+            binario = "0b"
+            binario += bin(struct.unpack('!I', struct.pack('!f', numero_float))[0])[2:].zfill(32)
+            individuo.set_x(binario)
 
         if individuo.get_y() == "randomico":
-            individuo.set_y(random.uniform(-10, 10))
+            k = 0    
+            while k <= 10:
+                numero_aleatorio = random.randint(0, 2**32 - 1)
+                binario = format(numero_aleatorio, '032b')
+                binario_string = str(binario)
+                binario_final = "0b"
+                binario_final += binario_string
+
+                q = int(binario_final, 0)
+                b8 = struct.pack('I', q)
+                x = struct.unpack('f', b8)[0]
+                if x < 10 and x > -10:
+                    k = 11
+            individuo.set_y(binario_final)
+        else:
+            numero_float = float(individuo.get_y())
+            binario = "0b"
+            binario += bin(struct.unpack('!I', struct.pack('!f', numero_float))[0])[2:].zfill(32)
+            individuo.set_y(binario)
 
     return novos_individuos
 

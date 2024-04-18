@@ -37,38 +37,7 @@ num_parents = 20
 
 # Geração inicial da população
 populacao = []
-for i in range(populacao_size):
-    k = 0
-    while k <= 10:
-        novoindiv = classes.INDIVIDUOS()
-        numero_aleatorio = random.randint(0, 2**32 - 1)
-        binario = format(numero_aleatorio, '032b')
-        binario_string = str(binario)
-        binario_final = "0b"
-        binario_final += binario_string
-        novoindiv.set_x(binario_final)
-        q = int(binario_final, 0)
-        b8 = struct.pack('I', q)
-        x = struct.unpack('f', b8)[0]
-        if x < 10 and x > -10:
-            k = 11
 
-    k = 0    
-    while k <= 10:
-        numero_aleatorio = random.randint(0, 2**32 - 1)
-        binario = format(numero_aleatorio, '032b')
-        binario_string = str(binario)
-        binario_final = "0b"
-        binario_final += binario_string
-        
-        q = int(binario_final, 0)
-        b8 = struct.pack('I', q)
-        x = struct.unpack('f', b8)[0]
-        if x < 10 and x > -10:
-            k = 11
-
-    novoindiv.set_y(binario_final)
-    populacao.append(novoindiv)
 # Loop principal do algoritmo genético
 for generation in range(num_generations):
     FunFit(populacao)
