@@ -2,7 +2,19 @@ import random
 import math
 
     
+def truncar_valor(valor):
+    if valor > 10:
+        return 10
+    elif valor < -10:
+        return -10
+    else:
+        return valor
+    
+def binario_para_float(binario):
+    return float(binario[2:]) / 1000.0
 
+def float_para_binario(valor):
+    return "0b" + bin(int(valor * 1000))[2:]
 
 def elitismo(vet):
     elite = []
@@ -54,25 +66,49 @@ def mutacao(indx, indy, muta):
                 Ymutado.append("1") 
     else:
         Ymutado.append(indy)
+    
+    Xmutado = ''.join(Xmutado)
+    Ymutado = ''.join(Ymutado)
                 
-    return ''.join(Xmutado),''.join(Ymutado)
-        
-        
-        
+    x_mutado_float = binario_para_float(Xmutado)
+    y_mutado_float = binario_para_float(Ymutado)
+    
+    # Truncar para o intervalo [-10, 10]
+    x_mutado_float = truncar_valor(x_mutado_float)
+    y_mutado_float = truncar_valor(y_mutado_float)
+    
+    # Converter de volta para binário
+    Xmutado = float_para_binario(x_mutado_float)
+    Ymutado = float_para_binario(y_mutado_float)
+    
+    return Xmutado, Ymutado
 
 
 def cruzamento(pai1x, pai1y, pai2x, pai2y):
 
-    Xdecendente = []
+    Xdescendente = ""
+    Ydescendente = ""
     for bit1, bit2 in zip(pai1x, pai2x):
-        bitDecendente = random.choice([bit1, bit2])
-        Xdecendente.append(bitDecendente)
+        Xdescendente += random.choice([bit1, bit2])
     
-    Ydecendente = []  
     for bit1, bit2 in zip(pai1y, pai2y):
-        bitDecendente = random.choice([bit1, bit2])
-        Ydecendente.append(bitDecendente)
+        Ydescendente += random.choice([bit1, bit2])
 
-    return ''.join(Xdecendente),''.join(Ydecendente)
+    Xdescendente = '0b' + Xdescendente
+    Ydescendente = '0b' + Ydescendente
+    
+    # Converter de binário para inteiro
+    x_descendente_int = int(Xdescendente, 2)
+    y_descendente_int = int(Ydescendente, 2)
+    
+    # Truncar para o intervalo [-10, 10]
+    x_descendente_int = truncar_valor(x_descendente_int)
+    y_descendente_int = truncar_valor(y_descendente_int)
+    
+    # Converter de volta para binário
+    Xdescendente = bin(x_descendente_int)
+    Ydescendente = bin(y_descendente_int)
+    
+    return Xdescendente, Ydescendente
 
 
