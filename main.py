@@ -1,1 +1,3 @@
-import AGbasico
+import interface
+
+interface

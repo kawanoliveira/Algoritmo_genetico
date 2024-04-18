@@ -140,6 +140,7 @@ def erro_x_indv(varname, index, mode):
     botao_inicio_teste()
 
 def erro_y_indv(varname, index, mode):
+  vetor_individuos[individuo].set_y(var_ent_y.get())
   if stringnumerica(var_ent_y.get()) == 1 or var_ent_y.get() == "0" or var_ent_y.get() == "randomico":
     txt_erro_ent_y.place_forget()
     txt_erro_ent_y_vazia.place_forget()
@@ -205,14 +206,15 @@ def botao_inicio_teste():
   if (stringnumerica(var_ent_maxgen.get()) == 3 and var_max_gen.get() == True) or (stringnumerica(var_ent_goal.get()) == 3 and var_valor_goal.get() == True) or (stringnumerica(var_ent_conver.get()) == 3 and var_convergencia.get() == True) or stringnumerica(var_ent_num_indv.get()) == 3:
     var_zero = True
 
-  if   stringnumerica(vetor_individuos[individuo].get_x()) == 2 and vetor_individuos[individuo].get_x() != "randomico":
-    erro_indv = True
-  elif stringnumerica(vetor_individuos[individuo].get_x()) == 3 and vetor_individuos[individuo].get_x() != "0":
-    erro_indv = True
-  elif stringnumerica(vetor_individuos[individuo].get_y()) == 2 and vetor_individuos[individuo].get_y() != "randomico":
-    erro_indv = True
-  elif stringnumerica(vetor_individuos[individuo].get_y()) == 3 and vetor_individuos[individuo].get_y() != "0":
-    erro_indv = True
+  if indv_nao_gerados == False:
+    if   stringnumerica(vetor_individuos[individuo].get_x()) == 2 and vetor_individuos[individuo].get_x() != "randomico":
+      erro_indv = True
+    elif stringnumerica(vetor_individuos[individuo].get_x()) == 3 and vetor_individuos[individuo].get_x() != "0":
+      erro_indv = True
+    elif stringnumerica(vetor_individuos[individuo].get_y()) == 2 and vetor_individuos[individuo].get_y() != "randomico":
+      erro_indv = True
+    elif stringnumerica(vetor_individuos[individuo].get_y()) == 3 and vetor_individuos[individuo].get_y() != "0":
+      erro_indv = True
 
   if (string_n_numerica or sem_criterio_parada or var_zero or indv_nao_gerados.get() == "true" or erro_indv):
     bttn_inicio.configure(state="disabled")
@@ -223,11 +225,12 @@ def botao_inicio_teste():
     txt_erro_semcriterio.place(relx=0.85, rely=0.13, anchor=CENTER)
   else:
     txt_erro_semcriterio.place_forget()
-
-  if erro_indv:
-    optm_seletor_indv.configure(state="disabled")
-  else:
-    optm_seletor_indv.configure(state="normal")
+  
+  if indv_nao_gerados == False:
+    if erro_indv:
+      optm_seletor_indv.configure(state="disabled")
+    else:
+      optm_seletor_indv.configure(state="normal")
 
 def troca_indv(varname, index, mode):
   global individuo
@@ -297,9 +300,10 @@ janela.resizable(False, False)
 caminho_imagem = Path(__file__).parent / 'imagens' / 'dna_branco2.ico'
 janela.iconbitmap(default=str(caminho_imagem))
 ctk.set_appearance_mode("dark")
-
-
-
+global vetor_individuos
+vetor_individuos = cf.criar_individuos(1)
+global individuo
+individuo = 0
 
 
 
@@ -642,24 +646,34 @@ txt_indv_nao_gerados.place(relx=0.85, rely=0.13, anchor=CENTER)
 
 
 
+#texto erro se a entrada do x for não numerica
 txt_erro_ent_x = ctk.CTkLabel(master=janela, 
                              text="Informe apenas numeros ou 'randomico'!",
                              font=("Inter", 12, "bold"), 
                              text_color="red",
                              wraplength=300)
 
+
+
+#texto erro se a entrada do y for não numerica
 txt_erro_ent_y = ctk.CTkLabel(master=janela, 
                              text="Informe apenas numeros ou 'randomico'!",
                              font=("Inter", 12, "bold"), 
                              text_color="red",
                              wraplength=300)
 
+
+
+#texto erro se a entrada do x for vazia
 txt_erro_ent_x_vazia = ctk.CTkLabel(master=janela, 
                              text="O valor não pode estar vazio!",
                              font=("Inter", 12, "bold"), 
                              text_color="red",
                              wraplength=300)
 
+
+
+#texto erro se a entrada do y for vazia
 txt_erro_ent_y_vazia = ctk.CTkLabel(master=janela, 
                              text="O valor não pode estar vazio!",
                              font=("Inter", 12, "bold"), 
