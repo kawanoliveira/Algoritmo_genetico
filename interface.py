@@ -4,12 +4,39 @@ import customtkinter as ctk
 from pathlib import Path
 import criarfilhos as cf
 from CTkScrollableDropdown import *
+import funcao_e_ranking as fr
 
 
 
 def acao(vetor_individuos1):
-  vetor_individuos1 = cf.atualizar_individuos(len(vetor_individuos1), vetor_individuos1)
-  print("dsad")
+  vetor_de_individuos = cf.atualizar_individuos(len(vetor_individuos1), vetor_individuos1)  
+  bool_max_geracoes = var_max_gen.get()
+  if bool_max_geracoes:
+    int_numero_max_geracoes = int(var_ent_maxgen.get())
+  else:
+    int_numero_max_geracoes = None
+  bool_valor_alcancado = var_valor_goal.get()
+  if bool_valor_alcancado:
+    float_valor_a_ser_alcancado = float(var_ent_goal.get())
+  else:
+    float_valor_a_ser_alcancado = None
+  bool_convergencia_prematura = var_convergencia.get()
+  if bool_convergencia_prematura:
+    int_numero_para_convergencia_prematura = int(var_ent_conver.get())
+  else:
+    int_numero_para_convergencia_prematura = None
+  float_porcentagem_de_mutacao = float(var_ent_porcentagem.get())
+  
+  fr.executar_algoritmo(vetor_de_individuos,
+                       bool_max_geracoes,
+                       int_numero_max_geracoes,
+                       bool_valor_alcancado,
+                       float_valor_a_ser_alcancado,
+                       bool_convergencia_prematura,
+                       int_numero_para_convergencia_prematura,
+                       float_porcentagem_de_mutacao,
+                       janela)
+
 
 def stringnumerica(text):
   if text != "" and text != "0":
@@ -32,6 +59,19 @@ def stringnumerica2(text):
     return 1 #se a string for numerica
   else:
     return 3 #string vazia ou zero
+
+def stringnumerica3(text):
+  if text != "" and text != "0":
+    try:
+      float(text)
+    except ValueError:
+      return 2
+    if float(text) > 100 or float(text) < 1:
+      return 3
+    return 1 #se a string for numerica
+  else:
+    return 3 #string vazia ou zero
+
 
 
 def max_gen_att(varname, index, mode):
@@ -165,7 +205,18 @@ def erro_y_indv(varname, index, mode):
     txt_erro_ent_y.place_forget()
     botao_inicio_teste()
 
-
+def erro_num_porcentagem(varname, index, mode):
+  if stringnumerica3(var_ent_porcentagem.get()) == 1:
+    txt_erro_porcentagem.place_forget()
+    txt_erro_porcentagem_zero.place_forget()
+    botao_inicio_teste()
+  if stringnumerica3(var_ent_porcentagem.get()) == 2:
+    txt_erro_porcentagem.place(relx=0.31, rely=0.56, anchor=CENTER)
+    txt_erro_porcentagem_zero.place_forget()
+  if stringnumerica3(var_ent_porcentagem.get()) == 3:
+    txt_erro_porcentagem_zero.place(relx=0.31, rely=0.56, anchor=CENTER)
+    txt_erro_porcentagem.place_forget()
+    botao_inicio_teste()
 
 def gerar_indv():
   ent_num_indv.configure(state="disabled", fg_color="#0c1a20", border_color="#204d53", text_color="grey")
@@ -209,13 +260,13 @@ def botao_inicio_teste():
   sem_criterio_parada = False
   var_zero = False
   erro_indv = False
-  if stringnumerica(var_ent_maxgen.get()) == 2 or stringnumerica(var_ent_goal.get()) == 2 or stringnumerica(var_ent_conver.get()) == 2 or stringnumerica(var_ent_num_indv.get()) == 2:
+  if stringnumerica(var_ent_porcentagem.get()) == 2 or stringnumerica(var_ent_maxgen.get()) == 2 or stringnumerica(var_ent_goal.get()) == 2 or stringnumerica(var_ent_conver.get()) == 2 or stringnumerica(var_ent_num_indv.get()) == 2:
     string_n_numerica = True
 
   if not(var_convergencia.get()) and not(var_valor_goal.get()) and not(var_max_gen.get()):
     sem_criterio_parada = True
 
-  if (stringnumerica(var_ent_maxgen.get()) == 3 and var_max_gen.get() == True) or (stringnumerica(var_ent_goal.get()) == 3 and var_valor_goal.get() == True) or (stringnumerica(var_ent_conver.get()) == 3 and var_convergencia.get() == True) or stringnumerica(var_ent_num_indv.get()) == 3:
+  if stringnumerica3(var_ent_porcentagem.get()) == 3 or (stringnumerica(var_ent_maxgen.get()) == 3 and var_max_gen.get() == True) or (stringnumerica(var_ent_goal.get()) == 3 and var_valor_goal.get() == True) or (stringnumerica(var_ent_conver.get()) == 3 and var_convergencia.get() == True) or stringnumerica(var_ent_num_indv.get()) == 3:
     var_zero = True
 
   if indv_nao_gerados.get() == "false":
@@ -700,18 +751,46 @@ txt_exemplo_indv = ctk.CTkLabel(master=janela,
 
 var_ent_porcentagem = ctk.StringVar()
 var_ent_porcentagem.set("1")
-ent_num_indv = ctk.CTkEntry(master=janela,
+ent_porcentagem = ctk.CTkEntry(master=janela,
                           placeholder_text="1, 2, 3...",
                           fg_color="#142C36",
                           border_color="#29636B",
-                          font=("Inter", 17, "bold"),
+                          font=("Inter", 24, "bold"),
                           placeholder_text_color="#646464",
                           text_color="white",
                           width=80,
                           height=40,
-                          textvariable=var_ent_num_indv)
+                          textvariable=var_ent_porcentagem)
 var_ent_porcentagem.trace_add("write", erro_num_porcentagem)
-ent_num_indv.place(relx=0.645, rely=0.2, anchor=CENTER)
+ent_porcentagem.place(relx=0.3, rely=0.5, anchor=CENTER)
+
+
+
+txt_porcentagem = ctk.CTkLabel(master=janela, 
+                             text="Porcentagem de mutação: (1%" " a 100%)",
+                             font=("Inter", 19, "bold"), 
+                             text_color="white",
+                             wraplength=130)
+txt_porcentagem.place(relx=0.17, rely=0.5, anchor=CENTER)
+
+
+#texto maxgen = 0
+txt_erro_porcentagem_zero = ctk.CTkLabel(master=janela, 
+                             text="Informe um numero entre 1 e 100!",
+                             font=("Inter", 12, "bold"), 
+                             text_color="red",
+                             wraplength=150)
+
+
+
+#texto porcentagem nao numerica
+txt_erro_porcentagem = ctk.CTkLabel(master=janela, 
+                             text="Informe apenas numeros!",
+                             font=("Inter", 12, "bold"), 
+                             text_color="red",
+                             wraplength=150)
+
+
 
 #mandar para o veberson(CLASS individuos vetor_de_individuos,         #vetor de individuos criados 
 #                       criteiro de parada: bool max_gerações,

@@ -1,21 +1,18 @@
-def stringnumerica2(text):
-  if text != "" and text != "0":
-    try:
-      float(text)
-    except ValueError:
-      return 2
-    if float(text) > 10 or float(text) < -10:
-      print("AAAAAA", text)
-      return 3
-    return 1 #se a string for numerica
-  else:
-    return 3 #string vazia ou zero
-  
+import matplotlib.pyplot as plt
 
-stringnumerica2("0")
-stringnumerica2("-20")
-stringnumerica2("10")
-stringnumerica2("12")
-stringnumerica2("-2")
-stringnumerica2("1.32")
-stringnumerica2("1,32")
+# Dados do gráfico
+x = [1, 2, 3, 4, 5]
+y = [2, 3, 4, 5, 6]
+
+# Criar figura e eixos
+fig, ax = plt.subplots()
+
+# Plotar dados
+ax.plot(x, y)
+
+# Ajustar o tamanho das bordas (espaço em branco) ao redor do gráfico
+plt.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.5)
+
+
+# Exibir o gráfico
+plt.show()
