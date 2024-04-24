@@ -1,18 +1,12 @@
-import matplotlib.pyplot as plt
+import random
 
-# Dados do gráfico
-x = [1, 2, 3, 4, 5]
-y = [2, 3, 4, 5, 6]
+def ranking(vet):
+    n = random.randint(0, len(vet) - 1)  # -1 para garantir que o índice esteja dentro dos limites
+    ranqueados = random.sample(vet, n + 1)  # +1 para incluir o último elemento selecionado
+    retornado = ranqueados[0]
+    vet.remove(retornado)  # Remover o elemento selecionado da lista original
+    return retornado
 
-# Criar figura e eixos
-fig, ax = plt.subplots()
-
-# Plotar dados
-ax.plot(x, y)
-
-# Ajustar o tamanho das bordas (espaço em branco) ao redor do gráfico
-plt.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.5)
-
-
-# Exibir o gráfico
-plt.show()
+vetor = [1, 2, 3, 4, 5, 6, 7, 8]
+print(ranking(vetor))
+print(vetor)  # Mostrar a lista original após a remoção do elemento

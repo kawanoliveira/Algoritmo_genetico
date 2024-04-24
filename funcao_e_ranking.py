@@ -2,6 +2,7 @@ import struct
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from tkinter import *
+import cruzaMuta as cm
 
 def funcao8(x, y):
     return (5 + (3*x) - (4*y) - (x**2) + (x*y) - (y**2))
@@ -11,7 +12,7 @@ def FunFit(populacao):
     for INDVI in populacao:  
         x, y = decodeIndivi(INDVI)
         fitness = funcao8(x, y)  #Calcula o valor da funcao
-        print(x, " ", y, " ", fitness)
+        #print(x, " ", y, " ", fitness)
         INDVI.set_fitness(fitness)
 
 #Funcao para decodificar binario para real
@@ -50,6 +51,7 @@ def executar_algoritmo(vetor_de_individuos,
     z_graph = []
 
     geracoes_sem_mudar = 0
+    maior = 0
     if bool_max_geracoes:
         for i in range(int_numero_max_geracoes):
             FunFit(vetor_de_individuos)
@@ -57,17 +59,33 @@ def executar_algoritmo(vetor_de_individuos,
             x_graph += [decodeNum(vetor_de_individuos[individuos].get_x()) for individuos in range(len(vetor_de_individuos))]
             y_graph += [decodeNum(vetor_de_individuos[individuos].get_y()) for individuos in range(len(vetor_de_individuos))]
             z_graph += [vetor_de_individuos[individuos].get_fitness() for individuos in range(len(vetor_de_individuos))]
+            if vetor_de_individuos[0].get_fitness() > maior:
+                maior = vetor_de_individuos[0].get_fitness()
+                geracoes_sem_mudar = 0
+            vetor_de_individuos = cm.cruzar_e_mutar(vetor_de_individuos, float_porcentagem_de_mutacao)
+            if bool_valor_alcancado:
+                if maior >= float_valor_a_ser_alcancado:
+                    continuar = False
+            if bool_convergencia_prematura:
+                if geracoes_sem_mudar == int_numero_para_convergencia_prematura:
+                    continuar = False
+            geracoes_sem_mudar += 1
     else:
         continuar = True
         while continuar:
             FunFit(vetor_de_individuos)
             vetor_de_individuos = selecaoRank(vetor_de_individuos)
+            x_graph += [decodeNum(vetor_de_individuos[individuos].get_x()) for individuos in range(len(vetor_de_individuos))]
+            y_graph += [decodeNum(vetor_de_individuos[individuos].get_y()) for individuos in range(len(vetor_de_individuos))]
+            z_graph += [vetor_de_individuos[individuos].get_fitness() for individuos in range(len(vetor_de_individuos))]
+            vetor_de_individuos = cm.cruzar_e_mutar(vetor_de_individuos, float_porcentagem_de_mutacao)
             if bool_valor_alcancado:
                 if vetor_de_individuos[0].get_fitness() >= float_valor_a_ser_alcancado:
                     continuar = False
             if bool_convergencia_prematura:
                 if geracoes_sem_mudar == int_numero_para_convergencia_prematura:
                     continuar = False
+            geracoes_sem_mudar += 1
 
     # Criar figura e eixos 3D
     fig = plt.figure(figsize=(5, 5))
@@ -97,3 +115,5 @@ def executar_algoritmo(vetor_de_individuos,
     canvas = FigureCanvasTkAgg(fig, master=janela)
     canvas.draw()
     canvas.get_tk_widget().place(relx=0.77, rely=0.7, anchor='center')
+
+    return vetor_de_individuos[0]

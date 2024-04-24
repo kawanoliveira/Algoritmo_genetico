@@ -5,6 +5,7 @@ from pathlib import Path
 import criarfilhos as cf
 from CTkScrollableDropdown import *
 import funcao_e_ranking as fr
+import cruzaMuta as cm
 
 
 
@@ -26,8 +27,8 @@ def acao(vetor_individuos1):
   else:
     int_numero_para_convergencia_prematura = None
   float_porcentagem_de_mutacao = float(var_ent_porcentagem.get())
-  
-  fr.executar_algoritmo(vetor_de_individuos,
+
+  retornado = fr.executar_algoritmo(vetor_de_individuos,
                        bool_max_geracoes,
                        int_numero_max_geracoes,
                        bool_valor_alcancado,
@@ -36,6 +37,48 @@ def acao(vetor_individuos1):
                        int_numero_para_convergencia_prematura,
                        float_porcentagem_de_mutacao,
                        janela)
+  
+  strx = "X: "
+  strx += str(cm.binario_para_float(retornado.get_x()))
+  strx = strx[:8]
+  stry = "Y: "
+  stry += str(cm.binario_para_float(retornado.get_y()))
+  stry = stry[:8]
+  strf = "Fitness: "
+  strf += str(retornado.get_fitness())
+  strf = strf[:14]
+
+  txt_melhorindiv = ctk.CTkLabel(master=janela, 
+                             text="Melhor Individuo:",
+                             font=("Inter", 24, "bold"), 
+                             text_color="#007000",
+                             wraplength=220)
+  txt_melhorindiv.place(relx=0.35, rely=0.475, anchor="w")
+  txt_melhorx = ctk.CTkLabel(master=janela, 
+                             text=strx,
+                             font=("Inter", 24, "bold"), 
+                             text_color="#007000",
+                             wraplength=220)
+  txt_melhorx.place(relx=0.35, rely=0.555, anchor="w")
+  txt_melhory = ctk.CTkLabel(master=janela, 
+                             text=stry,
+                             font=("Inter", 24, "bold"), 
+                             text_color="#007000",
+                             wraplength=220)
+  txt_melhory.place(relx=0.35, rely=0.605, anchor="w")
+  txt_melhorfitness = ctk.CTkLabel(master=janela, 
+                             text=strf,
+                             font=("Inter", 24, "bold"), 
+                             text_color="#007000",
+                             wraplength=220)
+  txt_melhorfitness.place(relx=0.35, rely=0.655, anchor="w")
+  bttn_inicio.configure(state="disabled")
+  optm_seletor_indv.place_forget()
+  txt_exemplo_indv.place_forget()
+  ent_x_indv.place_forget()
+  txt_x_indv.place_forget()
+  ent_y_indv.place_forget()
+  txt_y_indv.place_forget()
 
 
 def stringnumerica(text):
@@ -300,7 +343,10 @@ def troca_indv(varname, index, mode):
   individuo = var_seletor.get()
   individuo = int(individuo[10:len(individuo)])
   individuo = individuo - 1
-  
+  global ent_x_indv
+  global txt_x_indv
+  global ent_y_indv
+  global txt_y_indv
   global var_ent_x
   var_ent_x = ctk.StringVar()
   var_ent_x.set(vetor_individuos[individuo].get_x())
@@ -343,7 +389,7 @@ def troca_indv(varname, index, mode):
   txt_y_indv.place(relx=0.16, rely=0.92, anchor=CENTER)
   var_ent_y.trace_add("write", erro_y_indv)
 
-
+  
 
 
 
@@ -357,8 +403,8 @@ janela.title("Algoritmo Genetico Equipe 2")
 janela.configure()
 janela.geometry("900x700")
 janela.resizable(False, False)
-caminho_imagem = Path(__file__).parent / 'imagens' / 'dna_branco2.ico'
-janela.iconbitmap(default=str(caminho_imagem))
+#caminho_imagem = Path(__file__).parent / 'imagens' / 'dna_branco2.ico'
+#janela.iconbitmap(default=str(caminho_imagem))
 ctk.set_appearance_mode("dark")
 global vetor_individuos
 vetor_individuos = cf.criar_individuos(1)
@@ -762,7 +808,7 @@ ent_porcentagem = ctk.CTkEntry(master=janela,
                           height=40,
                           textvariable=var_ent_porcentagem)
 var_ent_porcentagem.trace_add("write", erro_num_porcentagem)
-ent_porcentagem.place(relx=0.3, rely=0.5, anchor=CENTER)
+ent_porcentagem.place(relx=0.23, rely=0.5, anchor=CENTER)
 
 
 
@@ -771,7 +817,7 @@ txt_porcentagem = ctk.CTkLabel(master=janela,
                              font=("Inter", 19, "bold"), 
                              text_color="white",
                              wraplength=130)
-txt_porcentagem.place(relx=0.17, rely=0.5, anchor=CENTER)
+txt_porcentagem.place(relx=0.1, rely=0.5, anchor=CENTER)
 
 
 #texto maxgen = 0
